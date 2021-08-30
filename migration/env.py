@@ -12,10 +12,6 @@ from app.models import posts, users
 config = context.config
 
 section = config.config_ini_section
-print("\n\n")
-print(section)
-print("\n\n")
-print(env.get("DB_PORT"))
 config.set_section_option(section, "DB_USER", env.get("DB_USER"))
 config.set_section_option(section, "DB_PASS", env.get("DB_PASS"))
 config.set_section_option(section, "DB_HOST", env.get("DB_HOST"))
