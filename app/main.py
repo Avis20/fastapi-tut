@@ -1,16 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
-import databases
-from os import getenv
-from models.posts import posts_table
-from models.users import users_table
+from app.models.posts import posts_table
+from app.models.users import users_table
 from sqlalchemy.sql import select
+from app.routers import users
+from app.models.database import database
 
 app = FastAPI()
-DATABASE_URL = (
-    f"postgres://{getenv('DB_USER')}:{getenv('DB_PASS')}@{getenv('DB_HOST')}:{getenv('DB_PORT')}/{getenv('DB_NAME')}"
-)
-database = databases.Database(DATABASE_URL)
 
 
 @app.on_event('startup')
@@ -41,6 +37,7 @@ async def get_root():
     print(query)
     return await database.fetch_all(query)
 
+app.include_router(users.router)
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="localhost", port=8000, reload=True)

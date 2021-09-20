@@ -8,7 +8,7 @@ from sqlalchemy import (
     DateTime,
 )
 
-from .users import users_table
+from app.models.users import users_table
 
 metadata = MetaData()
 
