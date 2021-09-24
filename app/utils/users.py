@@ -55,6 +55,15 @@ def hash_password(password: str, salt: str):
     return enc.hex()
 
 
+def validate_password(password: str, hashed_password: str):
+    """ Проверка пароля введенного пользователем и того что в БД """
+    salt, hashed = hashed_password.split('$')
+    got_hash = hash_password(password, salt)
+    print("\n\n validate_password")
+    print(f'salt={salt}, hashed={hashed}, got hash={got_hash}')
+    return got_hash == hashed
+
+
 if __name__ == '__main__':
     # create_user(user=UserCreate(email="kpgkgwvenebkulgrfv@pp7rvv.com", name="dsa", password="321"))
     res = create_user_token(user_id=1)
