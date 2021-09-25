@@ -28,6 +28,18 @@ async def create_user_token(user_id: int):
     return await database.fetch_one(query)
 
 
+async def get_user_by_token(token: str):
+    query = (
+        token_table.join(users_table).select().where(
+            token_table.c.token == token,
+            token_table.c.ts_expires > datetime.now()
+        )
+    )
+    print("\nget_user_by_token->>>")
+    print(query, f"\nparams: token={token}")
+    return await database.fetch_one(query)
+
+
 async def create_user(user: UserCreate):
     """ Создаем нового пользователя """
     salt = get_random_string()
