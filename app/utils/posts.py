@@ -79,7 +79,7 @@ async def get_posts(page: int):
 
 
 async def get_count_posts():
-    query = (select([func.count()]).select_from(posts_table))
+    query = select([func.count()]).select_from(posts_table)
     print("\n\nget_count_posts->>>\n")
     print(query)
     total = await database.fetch_val(query)
@@ -99,8 +99,7 @@ async def update_post(post_id, post):
 
 
 async def delete_post(post_id):
-    query = (posts_table.delete().where(posts_table.c.id == post_id))
+    query = posts_table.delete().where(posts_table.c.id == post_id)
     print("\n\ndelete_post->>>\n")
     print(query)
     await database.fetch_one(query)
-
