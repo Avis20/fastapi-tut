@@ -9,36 +9,36 @@ from app.models.database import database
 app = FastAPI()
 
 
-@app.on_event('startup')
+@app.on_event("startup")
 async def startup():
     # при запуске приложения коннектимся к БД
     await database.connect()
 
 
-@app.on_event('shutdown')
+@app.on_event("shutdown")
 async def shutdown():
     # при отключении - дисконект
     await database.disconnect()
 
 
-@app.get('/')
+@app.get("/")
 async def get_root():
-    query = (
-        select([
+    query = select(
+        [
             posts_table.c.id,
             posts_table.c.title,
             posts_table.c.content,
             posts_table.c.ts_create,
             posts_table.c.user_id,
-            users_table.c.name.label('username'),
-        ])
-        .select_from(posts_table.join(users_table))
-    )
+            users_table.c.name.label("username"),
+        ]
+    ).select_from(posts_table.join(users_table))
     print(query)
     return await database.fetch_all(query)
+
 
 app.include_router(users.router)
 app.include_router(posts.router)
 
-if __name__ == '__main__':
-    uvicorn.run('app.main:app', host="localhost", port=8000, reload=True)
+if __name__ == "__main__":
+    uvicorn.run("app.main:app", host="localhost", port=8000, reload=True)
