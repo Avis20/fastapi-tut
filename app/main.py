@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.models.posts import posts_table
 from app.models.users import users_table
 from sqlalchemy.sql import select
-from app.routers import users
+from app.routers import users, posts
 from app.models.database import database
 
 app = FastAPI()
@@ -38,6 +38,7 @@ async def get_root():
     return await database.fetch_all(query)
 
 app.include_router(users.router)
+app.include_router(posts.router)
 
 if __name__ == '__main__':
-    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
+    uvicorn.run('app.main:app', host="localhost", port=8000, reload=True)
