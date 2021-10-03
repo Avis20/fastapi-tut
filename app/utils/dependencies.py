@@ -1,7 +1,7 @@
-
-from app.utils import users
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+
+from app.utils import users, posts
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl='/user/login')
 
@@ -21,3 +21,9 @@ async def get_current_user(token: str = Depends(auth2_scheme)):
         )
     return user
 
+
+async def get_post_by_id(post_id: int):
+    post = await posts.get_post(post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post

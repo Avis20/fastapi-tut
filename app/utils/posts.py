@@ -97,3 +97,10 @@ async def update_post(post_id, post):
     post = await database.fetch_one(query)
     return post
 
+
+async def delete_post(post_id):
+    query = (posts_table.delete().where(posts_table.c.id == post_id))
+    print("\n\ndelete_post->>>\n")
+    print(query)
+    await database.fetch_one(query)
+
