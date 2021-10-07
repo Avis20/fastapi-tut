@@ -3,7 +3,8 @@ from datetime import datetime
 
 
 class UserCreate(BaseModel):
-    """ Проверка создания пользователя """
+    """Проверка создания пользователя"""
+
     email: EmailStr
     name: str
     password: str
@@ -22,9 +23,9 @@ class TokenBase(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
-    @validator('token')
+    @validator("token")
     def token2hex(cls, value):
-        """ Конвертируем uuid в hex формат """
+        """Конвертируем uuid в hex формат"""
         return value.hex
 
 

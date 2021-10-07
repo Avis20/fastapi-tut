@@ -1,10 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
-from app.models.posts import posts_table
-from app.models.users import users_table
-from sqlalchemy.sql import select
 from app.routers import users, posts
 from app.models.database import database
+from sqlalchemy.sql import select
 
 app = FastAPI()
 
@@ -22,19 +20,15 @@ async def shutdown():
 
 
 @app.get("/")
-async def get_root():
-    query = select(
-        [
-            posts_table.c.id,
-            posts_table.c.title,
-            posts_table.c.content,
-            posts_table.c.ts_create,
-            posts_table.c.user_id,
-            users_table.c.name.label("username"),
-        ]
-    ).select_from(posts_table.join(users_table))
-    print(query)
-    return await database.fetch_all(query)
+def get_root():
+    return {"success": 1}
+
+
+@app.get('/test_select')
+async def test_select():
+    response = await database.execute(select([1]))
+    print(response)
+    return 1
 
 
 app.include_router(users.router)

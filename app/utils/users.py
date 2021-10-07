@@ -16,12 +16,9 @@ async def get_user_by_email(email: str):
 
 async def create_user_token(user_id: int):
     query = (
-        token_table.insert().values(
-            user_id=user_id,
-            ts_expires=datetime.now() + timedelta(weeks=2)
-        ).returning(
-            token_table.c.token, token_table.c.ts_expires
-        )
+        token_table.insert()
+        .values(user_id=user_id, ts_expires=datetime.now() + timedelta(weeks=2))
+        .returning(token_table.c.token, token_table.c.ts_expires)
     )
     print("\n\ncreate_user_token->>>")
     print(query)
@@ -30,10 +27,9 @@ async def create_user_token(user_id: int):
 
 async def get_user_by_token(token: str):
     query = (
-        token_table.join(users_table).select().where(
-            token_table.c.token == token,
-            token_table.c.ts_expires > datetime.now()
-        )
+        token_table.join(users_table)
+        .select()
+        .where(token_table.c.token == token, token_table.c.ts_expires > datetime.now())
     )
     print("\nget_user_by_token->>>")
     print(query, f"\nparams: token={token}")
@@ -41,18 +37,18 @@ async def get_user_by_token(token: str):
 
 
 async def create_user(user: UserCreate):
-    """ Создаем нового пользователя """
+    """Создаем нового пользователя"""
     salt = get_random_string()
     print("salt", salt)
     hashed_password = hash_password(user.password, salt)
     query = users_table.insert().values(
-        name=user.name, email=user.email, hashed_password=f'{salt}${hashed_password}'
+        name=user.name, email=user.email, hashed_password=f"{salt}${hashed_password}"
     )
     print("\ncreate_user->>>")
     print(query)
     user_id = await database.execute(query)
     token = await create_user_token(user_id)
-    token_result = {"token": token.get('token'), "ts_expires": token.get('ts_expires')}
+    token_result = {"token": token.get("token"), "ts_expires": token.get("ts_expires")}
     # Зачем "is_active": True ???
     # return {**user.dict(), "token": token_result, "user_id": user_id, "is_active": True}
     return {**user.dict(), "token": token_result, "user_id": user_id}
@@ -68,15 +64,15 @@ def hash_password(password: str, salt: str):
 
 
 def validate_password(password: str, hashed_password: str):
-    """ Проверка пароля введенного пользователем и того что в БД """
-    salt, hashed = hashed_password.split('$')
+    """Проверка пароля введенного пользователем и того что в БД"""
+    salt, hashed = hashed_password.split("$")
     got_hash = hash_password(password, salt)
     print("\n\n validate_password")
-    print(f'salt={salt}, hashed={hashed}, got hash={got_hash}')
+    print(f"salt={salt}, hashed={hashed}, got hash={got_hash}")
     return got_hash == hashed
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # create_user(user=UserCreate(email="kpgkgwvenebkulgrfv@pp7rvv.com", name="dsa", password="321"))
     res = create_user_token(user_id=1)
     print("\n\n")

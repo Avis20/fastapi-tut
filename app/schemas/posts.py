@@ -4,7 +4,8 @@ from pydantic import BaseModel
 
 
 class PostModel(BaseModel):
-    """ Базовая модель поста """
+    """Базовая модель поста"""
+
     title: str
     content: str
 

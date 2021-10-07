@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.utils import users, posts
 
-auth2_scheme = OAuth2PasswordBearer(tokenUrl='/user/login')
+auth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
 
 
 async def get_current_user(token: str = Depends(auth2_scheme)):
@@ -12,13 +12,10 @@ async def get_current_user(token: str = Depends(auth2_scheme)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"}
+            headers={"WWW-Authenticate": "Bearer"},
         )
-    if not user.get('is_active'):
-        raise HTTPException(
-            status_code=400,
-            detail="Inactive user"
-        )
+    if not user.get("is_active"):
+        raise HTTPException(status_code=400, detail="Inactive user")
     return user
 
 

@@ -22,5 +22,5 @@ posts_table = Table(
     Column("title", String(100)),
     Column("content", String()),
     Column("ts_create", DateTime()),
-    Column("user_id", Integer, ForeignKey(users_table.c.id))
+    Column("user_id", Integer, ForeignKey(users_table.c.id)),
 )
