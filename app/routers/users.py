@@ -11,9 +11,6 @@ router = APIRouter()
 async def create_user(user: users.UserCreate):
     # Проверяем что в БД нету пользователя с таким email
     user_item = await users_utils.get_user_by_email(user.email)
-    print("\n\n")
-    print(user_item)
-    print("\n\n")
     if user_item:
         raise HTTPException(status_code=400, detail="Email is already registered")
     return await users_utils.create_user(user)
@@ -24,9 +21,7 @@ async def user_login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await users_utils.get_user_by_email(email=form_data.username)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    if not users_utils.validate_password(
-        form_data.password, user.get("hashed_password")
-    ):
+    if not users_utils.validate_password(form_data.password, user.get("hashed_password")):
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     return await users_utils.create_user_token(user_id=user.get("id"))
 

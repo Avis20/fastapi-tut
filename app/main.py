@@ -24,12 +24,13 @@ def get_root():
     return {"success": 1}
 
 
-@app.get('/test_select')
+@app.get("/test_select")
 async def test_select():
-    """ Проверка подключения к БД """
+    """Проверка подключения к БД"""
     response = await database.execute(select([1]))
     print(response)
     return 1
+
 
 app.include_router(healthcheck.router)
 app.include_router(users.router)

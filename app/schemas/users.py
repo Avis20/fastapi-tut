@@ -11,7 +11,7 @@ class UserCreate(BaseModel):
 
 
 class UserBase(BaseModel):
-    id: int
+    user_id: int
     email: EmailStr
     name: str
 
@@ -30,4 +30,5 @@ class TokenBase(BaseModel):
 
 
 class User(UserCreate):
+    user_id: int
     token: TokenBase = {}

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from app.models.users import users_table, token_table
 from app.models.database import database
 from app.schemas.users import UserCreate
+from sqlalchemy import func
 
 
 async def get_user_by_email(email: str):
@@ -29,7 +30,7 @@ async def get_user_by_token(token: str):
     query = (
         token_table.join(users_table)
         .select()
-        .where(token_table.c.token == token, token_table.c.ts_expires > datetime.now())
+        .where(token_table.c.token == token, token_table.c.ts_expires > func.now())
     )
     print("\nget_user_by_token->>>")
     print(query, f"\nparams: token={token}")

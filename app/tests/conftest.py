@@ -20,5 +20,5 @@ def test_db():
     try:
         yield database.TEST_DATABASE_URL
     finally:
+        # pass
         drop_database(database.TEST_DATABASE_URL)
-
