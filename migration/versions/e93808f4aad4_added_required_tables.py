@@ -27,6 +27,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+    op.execute('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
     op.create_table('tokens',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('token', postgresql.UUID(), server_default=sa.text('uuid_generate_v4()'), nullable=False),

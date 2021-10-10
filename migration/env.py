@@ -16,7 +16,10 @@ config.set_section_option(section, "DB_USER", env.get("DB_USER"))
 config.set_section_option(section, "DB_PASS", env.get("DB_PASS"))
 config.set_section_option(section, "DB_HOST", env.get("DB_HOST"))
 config.set_section_option(section, "DB_PORT", env.get("DB_PORT"))
-config.set_section_option(section, "DB_NAME", env.get("DB_NAME"))
+DB_NAME = env.get("DB_NAME")
+if env.get("TEST"):
+    DB_NAME = 'test-db'
+config.set_section_option(section, "DB_NAME", DB_NAME)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

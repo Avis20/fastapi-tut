@@ -11,6 +11,9 @@ router = APIRouter()
 async def create_user(user: users.UserCreate):
     # Проверяем что в БД нету пользователя с таким email
     user_item = await users_utils.get_user_by_email(user.email)
+    print("\n\n")
+    print(user_item)
+    print("\n\n")
     if user_item:
         raise HTTPException(status_code=400, detail="Email is already registered")
     return await users_utils.create_user(user)

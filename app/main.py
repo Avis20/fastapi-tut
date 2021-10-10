@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from app.routers import users, posts
+from app.routers import users, posts, healthcheck
 from app.models.database import database
 from sqlalchemy.sql import select
 
@@ -26,11 +26,12 @@ def get_root():
 
 @app.get('/test_select')
 async def test_select():
+    """ Проверка подключения к БД """
     response = await database.execute(select([1]))
     print(response)
     return 1
 
-
+app.include_router(healthcheck.router)
 app.include_router(users.router)
 app.include_router(posts.router)
 
